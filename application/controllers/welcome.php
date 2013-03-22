@@ -20,10 +20,19 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		$this->load->view('header');
-		$this->load->view('news');
+		$this->load->view('resource/brief');
+		$this->load->view('footer');
+	}
+
+	public function detail($id)
+	{
+		$data['id'] = $id;
+		$this->load->view('header',$data);
+		$this->load->view('resource/detail');
 		$this->load->view('footer');
 	}
 }
+
 
 /* End of file welcome.php */
 /* Location: ./application/controllers/welcome.php */

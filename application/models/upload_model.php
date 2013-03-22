@@ -11,4 +11,9 @@ class Upload_model extends CI_Model {
 	{
 		
 	}
+
+	public function add($data)
+	{
+		$query = $this->db->insert('uploads', $data);
+	}
 }

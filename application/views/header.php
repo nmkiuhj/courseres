@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>大学生课程资源分享网</title>
+        <title>test</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
@@ -20,10 +20,6 @@
         </style>
         <script type="text/javascript" src="<?php echo base_url('public/js/jquery.js'); ?>"></script>
         <link href="<?php echo base_url('public/css/bootstrap-responsive.css'); ?>" rel="stylesheet">
-        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-        <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -34,13 +30,12 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">大学生课程资源分享网</a>
+                    <a class="brand" href="<?php echo base_url('');?>">test</a>
                     <div class="nav-collapse collapse">
                     	<p class="navbar-text pull-right" id="user_info">
                     	</p>
                         <p class="navbar-text pull-right" id="general">
-                        	<a href="#login_modal" data-toggle="modal" class="navbar-link">登陆</a> | 
-                        	<a href="#register_modal" data-toggle="modal" class="navbar-link">注册</a>
+                        	
                         </p>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -173,6 +168,8 @@ $(document).ready(function(){
 	var user_name = '<?php $CI = &get_instance(); $user = $CI->session->userdata('user_info');echo $user['name']; ?>';
 	if (user_name){
 		changeStatus(user_name);
+	} else {
+		$('#general').append('<a href="#login_modal" data-toggle="modal" class="navbar-link">登陆</a> | <a href="#register_modal" data-toggle="modal" class="navbar-link">注册</a>');
 	}
 });
 
@@ -255,7 +252,9 @@ login = function() {
 				default:
 					changeStatus(response);
 					$('#login_modal').modal('hide');
-					$('#welcomeback_modal').modal('toggle');
+					$('#welcomeback_modal').modal('show').on('hidden',function(){
+						window.location.href = window.location.href;
+					});
 			}
 		}
 	});
@@ -272,7 +271,9 @@ register = function() {
 		success: function(response) {
 			changeStatus(response);
 			$('#register_modal').modal('hide');
-			$('#welcome_modal').modal('toggle');
+			$('#welcome_modal').modal('show').on('hidden',function(){
+				window.location.href = window.location.href;
+			});
 		}
 	});
 }

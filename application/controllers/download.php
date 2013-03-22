@@ -23,4 +23,9 @@ class Download extends CI_Controller{
 		$results = $this->download_model->show_download($user_id,$start,$limit);
 		echo json_encode($results);
 	}
+
+	public function do_download()
+	{
+		
+	}
 }
