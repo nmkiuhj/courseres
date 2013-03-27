@@ -20,19 +20,6 @@ class Resource extends CI_Controller{
 		echo json_encode($data);
 	}
 
-	public function upload()
-	{
-		if(! $this->session->userdata('user_info')){
-			redirect(base_url(''));
-		}
-
-		$data['actives']['resource_upload'] = ' class="active"';
-		$this->load->view('header',$data);
-		$this->load->view('sidebar');
-		$this->load->view('resource/upload');
-		$this->load->view('footer');
-	}
-
 	public function detail($id)
 	{
 		$this->load->model('resource_model');

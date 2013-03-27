@@ -1,0 +1,11 @@
+*.project
+*.tmp*
+*.idea
+user_guide/*
+logs/*
+log/*
+application/config/database.php
+.buildpath
+.settings/*
+application/logs/*
+uploads/*

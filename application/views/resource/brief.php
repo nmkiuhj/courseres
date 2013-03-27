@@ -62,7 +62,7 @@ $.fn.showList = function(option){
 
 $('td').live('click',function(){
     var id = $(this).attr('data-id');
-    location.href = '<?php echo base_url('welcome/detail');?>/'+id;
+    location.href = '<?php echo base_url('main/detail');?>/'+id;
 });
 
 </script>
