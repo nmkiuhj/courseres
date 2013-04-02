@@ -27,10 +27,22 @@ class Upload extends CI_Controller{
 		echo json_encode($results);
 	}
 
-	public function do_upload()
+	public function resource_upload()
 	{
 		$user_info = $this->session->userdata('user_info');
 		$resource = $_POST;
+		if ( ! empty($_FILES)) {
+            $config['file_name'] = time().rand(1000, 9999);
+            $config['upload_path'] = './uploads/resources';
+            $config['allowed_types'] = 'txt|doc|docx|ppt|pdf';
+            $config['max_size'] = '2000000';
+            $this->load->library('upload', $config);
+            if ($this->upload->do_upload())
+            {
+                $picinfo = $this->upload->data();
+                $data['save_path'] = $picinfo['file_name'];
+            }
+        }
 		$resource['uploader_id'] = $user_info['id'];
 		$resource['upload_date'] = time();
 		$this->load->model('resource_model');

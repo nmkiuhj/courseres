@@ -1,47 +1,50 @@
 <?php
 
-class User_model extends CI_Model{
+class User_model extends CI_Model {
 	
+	const DBL_USER = 'users';
+
 	public function __construct()
 	{
-		parent::__construct();
-		$this->load->library('encrypt');
+		parent::__construct();	
 	}
-	
-	public function get_users($data)
+
+	public function get_one($array)
 	{
-		$query = $this->db->get('users');
-		foreach( $query->result_array() as $user ){
-			if( $data['name'] === $user['name'] ){
-				if( $data['password'] === $this->encrypt->decode($user['password'])) {
-					return $user;
-				} else {
-					return 1;
-				}
-			}
+		$query = $this->db->get_where(self::DBL_USER,$array);
+		return $query->row_array();
+	}
+
+	public function get_all($array="",$start="",$num="",$keyword="")
+	{
+		if($array!=""){
+			$this->db->where($array);
 		}
-		return 2;
-	}
-	
-	public function is_exist($data)
-	{
-		$this->db->select('email');
-		$query = $this->db->get('users');
-		foreach( $query->result_array() as $user ){
-			if( $data !== $user['email']){
-				continue;
-			} else {
-				return 1;
-			}
+		if($num!=""){
+			$this->db->limit($num,$start);
 		}
-		return 0;
+		$this->db->order_by('create_time','desc');
+		$query = $this->db->get(self::DBL_USER);
+
+		return $query->result_array();
 	}
-	
-	public function register($data)
+
+	public function add($array)
+	{ 
+		$this->db->insert(self::DBL_USER,$array);
+		return ($this->db->affected_rows()==1) ? $this->db->insert_id() : FALSE;
+	}
+
+	public function del($id)
 	{
-		$data['password'] = $this->encrypt->encode($data['password']);
-		$this->db->insert('users',$data);
-		$data['id'] = $this->db->insert_id();
-		return $data;
+		$this->db->delete(self::DBL_USER,array('id' => intval($id)));
+		return ($this->db->affected_rows()==1) ? TRUE : FALSE;
+	}
+
+	public function update($array,$id)
+	{
+		$this->db->where('id',$id);
+		$this->db->update(self::DBL_USER,$array);
+		return ($this->db->affected_rows()==1) ? TRUE : FALSE;
 	}
 }

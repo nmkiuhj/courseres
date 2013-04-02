@@ -1,20 +1,24 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Login extends MY_Controller {
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->check_login();
+    }
+
     public function index()
     {
         $data = $_POST;
         $error = array();
         if ( ! empty($data['name'])) {
-            $this->load->model('admin_model');
-            $admin = $this->admin_model->get_one(array('name'=>$data['name']));
-            print_r($admin);
-            print_r($admin['nonce']);
-            print_r($admin['password']);
-            if ( $admin && sha1 ( $data['password'] . $admin['nonce'] ) == $admin['password'] ) {
+            $this->load->model('admins_model');
+            $admin = $this->admins_model->get_one(array('name'=>$data['name']));
+            if ( ! empty($admin) && sha1 ( $data['password'] . $admin['nonce'] ) == $admin['password'] ) {
                 $user = $admin;
                 $this->session->set_userdata ( 'user', $user );
-                header('location:'.base_url('admin/resources'));
+                header('location:'.base_url('admin/articles'));
             }
             $error = array('message' => '用户名或密码错误');
         }
@@ -27,8 +31,3 @@ class Login extends MY_Controller {
         $this->load->view('admin/signin');
     }
 }
-
-
-
-/* End of file login.php */
-/* Location: ./application/controllers/login.php */
