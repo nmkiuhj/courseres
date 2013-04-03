@@ -35,7 +35,7 @@
 
 $(document).ready(function(){
     getCategoryList('00');
-    $('#category_list a').live('click','.children',function(){
+    $('#category_list tr').live('click','.children',function(){
         var id = $(this).attr('data-id');
         getCategoryList(id);
     });
@@ -67,10 +67,10 @@ function getCategoryList(id){
         dataType: 'json',
         data: {id:id},
         success: function(response){
-            var fix = '<td><a href="#" data-id={{id}} class="fix pull-right"><i class="icon-wrench"></i>修改</a></td>',
-                del = '<td><a href="#" data-id={{id}} class="delete pull-right"><i class="icon-remove"></i>删除</a></td>',
-                id = '<td><a href="#">{{id}}</a></td>',
-                name = '<td><a href="#" data-id={{id}} class="children">{{name}}</a></td>',
+            var fix = '<td><a href="#fix" class="fix pull-right"><i class="icon-wrench"></i>修改</a></td>',
+                del = '<td><a href="#del" class="delete pull-right"><i class="icon-remove"></i>删除</a></td>',
+                id = '<td><a href="#id">{{id}}</a></td>',
+                name = '<td><a href="#name" class="children">{{name}}</a></td>',
                 tmpl = '{{#items}}<tr data-id={{id}}>'+id+name+fix+del+'</tr>{{/items}}',
                 template = Hogan.compile(tmpl);
             output = template.render(response.data);
