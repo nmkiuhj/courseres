@@ -9,14 +9,20 @@ class Resource_model extends CI_Model {
 		parent::__construct();	
 	}
 
-	public function get_one($array)
+	public function get_one($array="",$start="",$num="")
 	{
+		if($num!=""){
+			$this->db->limit($num,$start);
+		}
 		$query = $this->db->get_where(self::DBL_RESOURCE,$array);
 		return $query->row_array();
 	}
 
 	public function get_all($array="",$start="",$num="",$keyword="")
 	{
+		if($keyword!=""){
+			$this->db->select($keyword);
+		}
 		if($array!=""){
 			$this->db->where($array);
 		}

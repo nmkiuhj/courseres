@@ -20,8 +20,8 @@ class Resources extends MY_Controller {
 		$resource_arr = $this->resource_model->get_all("",$start,$limit);
 		for($i=0;$i<$count;$i++){
 			$category_id = $resource_arr[$i]['category_id'];
-			$category_arr = $this->category_model->get_one(array('id'=>$category_id));
-			$resource_arr[$i]['category_path'] = $this->get_category_path($category_arr);
+			$paths = $this->category_model->get_path($category_id);
+			$resource_arr[$i]['category_path'] = implode(' > ',$paths);
 		}
 		$this->response($resource_arr,$count);
 	}
@@ -29,8 +29,8 @@ class Resources extends MY_Controller {
 	public function get_detail($id)
 	{
 		$resource = $this->resource_model->get_one(array('id'=>$id));
-		$category_arr = $this->category_model->get_one(array('id'=>$resource['category_id']));
-		$resource['category_path'] = $this->get_category_path($category_arr);
+		$paths = $this->category_model->get_path($resource['category_id']);
+		$resource['category_path'] = implode(' > ',$paths);
 		$this->response($resource);
 	}
 
@@ -44,20 +44,4 @@ class Resources extends MY_Controller {
         }
         return;
     }
-
-    public function get_category_path($data)
-    {
-
-		$child_name = $data['name'];
-		$parents = explode('/',$data['category_field']);
-    	array_shift($parents);
-    	array_pop($parents);
-		$data['category_path'] = '';
-		foreach($parents as $id){
-			$parent = $this->category_model->get_one(array('id'=>$id));
-			$data['category_path'] .= $parent['name'].' > ';
-		}
-		$data['category_path'] .= $child_name;
-		return $data['category_path'];
-	}
 }

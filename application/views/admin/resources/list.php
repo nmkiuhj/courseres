@@ -87,7 +87,7 @@ showError = function (field_name) {
 <h3>资源列表</h3>
 <div class="row-fluid">
     <div class="span4">
-       <div class="row-fluid show-grid">
+        <div class="row-fluid show-grid">
             <div class="span12">
                 <table class="table table-striped table-hover">
                     <thead>
