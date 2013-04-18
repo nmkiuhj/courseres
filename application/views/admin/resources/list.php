@@ -20,6 +20,7 @@
         &lt;div class="controls"&gt;
             &lt;input type="text" class="input-xlarge" name="category_path" value="{{category_path}}"/&gt;
             &lt;span class="help-inline hide"&gt;内容不能为空&lt;/span&gt;
+            &lt;input type="hidden" name="category_id" value="{{category_id}}"/&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 
@@ -31,6 +32,34 @@
         &lt;/div&gt;
     &lt;/div&gt;
 
+    &lt;div class="control-group"&gt;
+        &lt;label class="control-label"&gt;上传用户&lt;/label&gt;
+        &lt;div class="controls"&gt;
+            &lt;input type="text" class="input-xlarge" name="uploader_name" value="{{uploader_name}}" disabled/&gt;
+            &lt;input type="hidden" name="id" value="{{id}}" /&gt;
+            &lt;span class="help-inline hide"&gt;标题不能为空&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+
+    &lt;div class="control-group"&gt;
+        &lt;label class="control-label"&gt;上传时间&lt;/label&gt;
+        &lt;div class="controls"&gt;
+            &lt;input type="text" class="input-xlarge" name="upload_date" value="{{upload_date}}" disabled/&gt;
+            &lt;input type="hidden" name="id" value="{{id}}" /&gt;
+            &lt;span class="help-inline hide"&gt;标题不能为空&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="control-group"&gt;
+        &lt;label class="control-label"&gt;下载次数&lt;/label&gt;
+        &lt;div class="controls"&gt;
+            &lt;input type="text" class="input-xlarge" name="download_times" value="{{download_times}}" disabled/&gt;
+            &lt;input type="hidden" name="id" value="{{id}}" /&gt;
+            &lt;span class="help-inline hide"&gt;标题不能为空&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
     &lt;button class="btn btn-primary" id="resource_edit" data-id="{{id}}"&gt;保存&lt;/button&gt;
     &lt;a class="btn btn-danger resource_delete" data-id="{{id}}"&gt;删除&lt;/a&gt;
 
@@ -38,6 +67,21 @@
 &lt;/form&gt;
 
 </pre>
+<div id="category_modal" class="modal hide fade" aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1">
+    <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <h3 id="myModalLabel">分类列表</h3>
+    </div>
+    <div class="modal-body">
+        <form id="category_detail">
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button id="category_btn" class="btn btn-primary">确定</button>
+        <button class="btn">取消</button>
+    </div>
+</div>
 
 <script type="text/javascript">
 var options = {
@@ -65,9 +109,8 @@ function showRequest(formData, jqForm, options) {
 // post-submit callback
 function showResponse(responseText, statusText, xhr, $form) {
     alert('保存成功');
-    //getresourcesList(1);
-    getresourcesList(1);
-    $('#resource_form').remove();
+    getResourcesList(1);
+    //$('#resource_form').remove();
 }
 
 clearError = function (form_id) {
@@ -183,9 +226,75 @@ var resourceDelete = function() {
     }
 }
 
-$(document).on('click', '.pagination li a', function(){
+var resourceEdit
+
+$(document).on('click','.pagination li a', function(){
     var page = $(this).attr('data-page');
     getResourcesList(page);
 });
+
+$(document).on('focus','input[name=category_path]',function(){
+    getAllCategories();
+    $('#category_modal').modal('show');
+});
+
+function getAllCategories() {
+    var $data_array = [];
+    $.ajax({
+        url: '<?php echo base_url('data/categories/get_all')?>',
+        dataType: 'json',
+        success: function(response){
+            var items = response.data.items;
+            var total = response.data.totalItems;
+            var tmpl = createUl(items,'00');
+            $('#category_detail').html(tmpl);
+        }
+    });
+}
+
+function createUl(items,parent_id) {
+    if( ! (typeof(items) == "undefined")) {
+        var tmpl = '<ul>';
+        for(var i in items) {
+            if(items[i].parent_id == parent_id) {
+                if(items[i].id.length == 6) {
+                    var attr = 'class="major"';
+                    tmpl += '<li data-id="'+items[i].id+'"'+attr+'><a href="#">'+items[i].name+'</a></li>';
+                } else {
+                    tmpl += '<li data-id='+items[i].id+'><a href="#">'+items[i].name+'</a></li>';
+                }
+                var id = items[i].id;
+                delete items[i];
+                tmpl += createUl(items,id);
+            }
+        }
+        tmpl += '</ul>';
+        return tmpl;
+    }
+}
+
+$(document).on('click','.major',function(){
+    $('#category_modal').modal('hide');
+    var id = $(this).attr('data-id');
+    getBreadCrumb(id);
+});
+
+function getBreadCrumb(id){
+    $.ajax({
+        url: '<?php echo base_url('data/categories/get_category_bread')?>',
+        data: {id:id},
+        success: function(response){
+            var array = new Array();
+            var total = response.data.totalItems;
+            var items = response.data.items;
+            for(var i = 0; i < total; i++) {
+                array.push(items[i].name);
+            }
+            var output = array.join(' > ');
+            $('input[name=category_path]').val(output);
+            $('input[name=category_id]').val(id);
+        }
+    });
+}
 
 </script>

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>IHI 数据后台管理<?php echo base_url(); ?></title>
+        <title>COURSERES 数据后台管理<?php echo base_url(); ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
@@ -34,7 +34,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">IHI 数据后台管理</a>
+                    <a class="brand" href="#">COURSERES 数据后台管理</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
                             Logged in as <span style="color:blue;" href="#" class="navbar-link"><?php $CI = &get_instance(); $user = $CI->session->userdata('user');echo $user['name']; ?></span>

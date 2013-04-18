@@ -12,7 +12,7 @@ class Categories extends MY_Controller {
 	public function get_list()
 	{
 		$id = $this->input->get('id');
-		$count = ($results = $this->category_model->get_all(array('parent_id'=> $id)));
+		$count = count($results = $this->category_model->get_all(array('parent_id'=> $id)));
 		$this->response($results,$count);
 	}
 
@@ -37,5 +37,11 @@ class Categories extends MY_Controller {
             echo json_encode(array('error'=> array('message' => '删除失败！')));
         }
         return;
+	}
+
+	public function get_all()
+	{
+		$count = count($results = $this->category_model->get_all('','','','id,name,parent_id'));
+		$this->response($results,$count);
 	}
 }

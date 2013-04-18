@@ -12,7 +12,12 @@
                         	<li class="nav-header">资源管理</li>
                         	<li<?php echo @$actives['resources_list']; ?>><a href="<?php echo base_url('admin/resources'); ?>">资源列表</a></li>
                             <li class="nav-header">分类管理</li>
-                            <li<?php echo @$actives['categories_list']; ?>><a href="<?php echo base_url('admin/categories'); ?>">分类列表</a></li>                        </ul>
+                            <li<?php echo @$actives['categories_list']; ?>><a href="<?php echo base_url('admin/categories'); ?>">分类列表</a></li>
+                            <li class="nav-header">用户管理</li>
+                            <li<?php echo @$actives['users_list']; ?>><a href="<?php echo base_url('admin/users'); ?>">用户列表</a></li>
+                            <li class="nav-header">管理员管理</li>
+                            <li<?php echo @$actives['admin_update']; ?>><a href="<?php echo base_url('admin/admins'); ?>">密码修改</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="span10 tab-content well" id="workdiv">

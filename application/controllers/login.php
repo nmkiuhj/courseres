@@ -8,9 +8,6 @@ class Login extends MY_Controller {
         if ( ! empty($data['name'])) {
             $this->load->model('admin_model');
             $admin = $this->admin_model->get_one(array('name'=>$data['name']));
-            print_r($admin);
-            print_r($admin['nonce']);
-            print_r($admin['password']);
             if ( $admin && sha1 ( $data['password'] . $admin['nonce'] ) == $admin['password'] ) {
                 $user = $admin;
                 $this->session->set_userdata ( 'user', $user );
