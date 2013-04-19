@@ -30,7 +30,7 @@
     &lt;div class="control-group"&gt;
         &lt;label class="control-label"&gt;积分&lt;/label&gt;
         &lt;div class="controls"&gt;
-            &lt;input type="text" class="input-xlarge" name="point" value="{{point}}" disabled/&gt;
+            &lt;input type="text" class="input-xlarge" name="point" value="{{point}}"/&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 
@@ -61,7 +61,7 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th style="width:100%">用户名</th>
+                            <th style="width:70%">用户名</th><th></th>
                         </tr>
                     </thead>
                     <tbody id="user_list">
@@ -93,7 +93,7 @@ function getUsersList(page)
         dataType: 'json',
         data:{page:page, limit:limit},
         success: function(response){
-            var tmpl = '{{#items}}<tr style="cursor: pointer;" class="user_list" data-id="{{id}}"><td>{{name}}</td></tr>{{/items}}',
+            var tmpl = '{{#items}}<tr style="cursor: pointer;" class="user_list" data-id="{{id}}"><td>{{name}}</td><td>{{#enabled}}{{/enabled}}{{^enabled}}禁用{{/enabled}}</td></tr>{{/items}}',
                 template = Hogan.compile(tmpl);
             output = template.render(response.data);
             $('#user_list').html(output);

@@ -1,10 +1,10 @@
 <?php
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class MY_Controller extends CI_Controller{
+class MY_Controller extends CI_Controller {
 
-	public function __construct(){
-
+	public function __construct()
+    {
 		parent::__construct();
 	}
 
@@ -45,16 +45,16 @@ class MY_Controller extends CI_Controller{
         exit($output);
     }
     
-	public function _admin_load_view($data,$url){
-		
+	public function _admin_load_view($data,$url)
+    {
 		$this->load->view('admin/header',$data);
 		$this->load->view('admin/sidebar');
 		$this->load->view($url);
 		$this->load->view('admin/footer');
 	}
 
-    public function _front_load_view($data,$url){
-        
+    public function _front_load_view($data,$url)
+    {
         $this->load->view('header',$data);
         $this->load->view($url);
         $this->load->view('footer');
