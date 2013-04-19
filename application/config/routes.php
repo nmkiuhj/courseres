@@ -40,6 +40,7 @@
 
 $route['default_controller'] = "main";
 $route['404_override'] = '';
+$route['admin'] = 'admin/resources';
 
 
 /* End of file routes.php */

@@ -34,7 +34,6 @@ class Main extends CI_Controller {
 
 	public function do_upload()
 	{
-		$th
 	}
 }
 

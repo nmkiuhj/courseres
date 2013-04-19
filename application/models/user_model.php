@@ -1,47 +1,78 @@
 <?php
 
-class User_model extends CI_Model{
+class User_model extends CI_Model {
 	
+	const TBL_USER = 'users';
+	/**
+	 * 构造函数
+	 */
 	public function __construct()
 	{
-		parent::__construct();
-		$this->load->library('encrypt');
+		parent::__construct();	
 	}
-	
-	public function get_users($data)
+	/**
+	 * 获得单个用户信息
+	 * @param  array $array WHERE条件
+	 * @param  int   $start
+	 * @param  int   $num
+	 * @return array
+	 */
+	public function get_one($array)
 	{
-		$query = $this->db->get('users');
-		foreach( $query->result_array() as $user ){
-			if( $data['name'] === $user['name'] ){
-				if( $data['password'] === $this->encrypt->decode($user['password'])) {
-					return $user;
-				} else {
-					return 1;
-				}
-			}
+		$query = $this->db->get_where(self::TBL_USER,$array);
+		return $query->row_array();
+	}
+	/**
+	 * 获得所有用户信息
+	 * @param  array $array   WHERE条件
+	 * @param  int   $start
+	 * @param  int   $num
+	 * @param  array $keyword SELECT关键字
+	 * @return array
+	 */
+	public function get_all($array="",$start="",$num="",$keyword="")
+	{
+		if($array!=""){
+			$this->db->where($array);
 		}
-		return 2;
-	}
-	
-	public function is_exist($data)
-	{
-		$this->db->select('email');
-		$query = $this->db->get('users');
-		foreach( $query->result_array() as $user ){
-			if( $data !== $user['email']){
-				continue;
-			} else {
-				return 1;
-			}
+		if($num!=""){
+			$this->db->limit($num,$start);
 		}
-		return 0;
+		$this->db->order_by('create_date','desc');
+		$query = $this->db->get(self::TBL_USER);
+
+		return $query->result_array();
 	}
-	
-	public function register($data)
+	/**
+	 * 添加信息
+	 * @param  array   $array 添加内容
+	 * @return boolean        是否成功
+	 */
+	public function add($array)
+	{ 
+		$this->db->insert(self::TBL_USER,$array);
+		return ($this->db->affected_rows()==1) ? $this->db->insert_id() : FALSE;
+	}
+	/**
+	 * 删除信息
+	 * @param  int $id
+	 * @return boolean
+	 */
+	public function del($id)
 	{
-		$data['password'] = $this->encrypt->encode($data['password']);
-		$this->db->insert('users',$data);
-		$data['id'] = $this->db->insert_id();
-		return $data;
+		$this->db->delete(self::TBL_USER,array('id' => intval($id)));
+		return ($this->db->affected_rows()==1) ? TRUE : FALSE;
+	}
+	/**
+	 * 更新信息
+	 * @param  array   $array 更新内容
+	 * @param  int     $id
+	 * @return boolean
+	 */
+	public function update($array,$id)
+	{
+		$this->db->where('id',$id);
+		$this->db->update(self::TBL_USER,$array);
+		return ($this->db->affected_rows()==1) ? TRUE : FALSE;
 	}
 }
